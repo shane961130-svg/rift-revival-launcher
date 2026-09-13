@@ -58,9 +58,10 @@ class LauncherUiTests
                 scroll.Value=0;Application.DoEvents();
                 foreach (Size size in new[] { new Size(1586,992), new Size(1280,800), new Size(1110,695) }) {
                     form.ClientSize = size; Application.DoEvents();
-                    bool contained = true;
-                    foreach (Control c in form.Controls) if (c.Visible && (c.Left < 0 || c.Top < 0 || c.Right > form.ClientSize.Width + 1 || c.Bottom > form.ClientSize.Height + 1)) contained = false;
-                    Check(contained, "visible controls fit " + size.Width + "x" + size.Height);
+                    List<string> outside = new List<string>();
+                    foreach (Control c in form.Controls) if (c.Visible && (c.Left < 0 || c.Top < 0 || c.Right > form.ClientSize.Width + 1 || c.Bottom > form.ClientSize.Height + 1))
+                        outside.Add(c.GetType().Name + " '" + c.Text + "' " + c.Bounds + " within " + form.ClientSize);
+                    Check(outside.Count == 0, "visible controls fit " + size.Width + "x" + size.Height + (outside.Count == 0 ? "" : ": " + String.Join("; ", outside)));
                     Call(form,"SetPage","settings");
                     DesignButton updates=Field<DesignButton>(form,"checkUpdates"),install=Field<DesignButton>(form,"install");
                     Check(updates.Visible&&updates.Right<=form.ClientSize.Width&&!updates.Bounds.IntersectsWith(install.Bounds),"Settings update button fits without installation overlap at "+size.Width);
