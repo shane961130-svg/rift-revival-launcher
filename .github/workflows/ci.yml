@@ -1,0 +1,27 @@
+name: Build and test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and run offline tests
+        shell: powershell
+        run: ./scripts/Test.ps1
+      - name: Upload unsigned launcher
+        uses: actions/upload-artifact@v4
+        with:
+          name: RiftRevivalLauncher-unsigned
+          path: |
+            artifacts/RiftRevivalLauncher.exe
+            artifacts/Mono.Cecil.dll

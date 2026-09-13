@@ -1,0 +1,17 @@
+/.build/
+/artifacts/
+/work/
+/.vs/
+*.user
+*.suo
+*.exe
+*.dll
+*.zip
+*.pdb
+*.log
+*.db
+*.ssk
+SSK.txt
+operations.local.json
+Config.json
+server.json
