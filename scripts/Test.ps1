@@ -13,7 +13,9 @@ if ($LASTEXITCODE -ne 0 -or -not (Test-Path -LiteralPath $launcher)) { throw 'La
 $fixtures = Join-Path $project 'work\public-tests'
 New-Item -ItemType Directory -Path $fixtures -Force | Out-Null
 foreach ($suite in @('LauncherUpdates.Tests', 'Launcher.UiTests')) {
-    $testExe = Join-Path $fixtures ($suite + '.exe')
+    # Keep test executables beside the launcher so the .NET Framework loader
+    # resolves the referenced assembly identically on local and CI machines.
+    $testExe = Join-Path $artifacts ($suite + '.exe')
     & $compiler /nologo /target:exe /platform:x64 /codepage:65001 /langversion:5 "/out:$testExe" "/reference:$launcher" /reference:System.Web.Extensions.dll /reference:System.IO.Compression.dll /reference:System.IO.Compression.FileSystem.dll /reference:System.Windows.Forms.dll /reference:System.Drawing.dll (Join-Path $project ('tests\' + $suite + '.cs'))
     if ($LASTEXITCODE -ne 0) { throw "$suite compilation failed." }
     if (-not $CompileOnly) {
