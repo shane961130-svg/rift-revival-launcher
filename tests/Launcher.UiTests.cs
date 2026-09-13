@@ -57,7 +57,7 @@ class LauncherUiTests
                 Check(new ModSets(root).Active.Mask==226,"backpack selection preserves glove and cartridge selections");
                 scroll.Value=0;Application.DoEvents();
                 foreach (Size size in new[] { new Size(1586,992), new Size(1280,800), new Size(1110,695) }) {
-                    form.ClientSize = size; Application.DoEvents();
+                    form.ClientSize = size; Call(form, "Arrange"); Application.DoEvents();
                     List<string> outside = new List<string>();
                     foreach (Control c in form.Controls) if (c.Visible && (c.Left < 0 || c.Top < 0 || c.Right > form.ClientSize.Width + 1 || c.Bottom > form.ClientSize.Height + 1))
                         outside.Add(c.GetType().Name + " '" + c.Text + "' " + c.Bounds + " within " + form.ClientSize);
